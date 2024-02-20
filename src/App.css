@@ -1,38 +1,120 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+h3 {
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+.react-autosuggest__container {
+  position: relative;
+  width: 300px;
+  margin-bottom: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.react-autosuggest__input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #61dafb;
+  border-radius: 4px;
+  outline: none;
+}
+
+.react-autosuggest__suggestions-container {
+  display: none;
+}
+
+.react-autosuggest__suggestions-container--open {
+  display: block;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  border: 1px solid #61dafb;
+  background-color: #ffffff;
+  z-index: 2;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.suggestion-thumbnail {
+  width: 50%; /* Ajustez la largeur de l'image selon vos besoins */
+  height: auto;
+  margin-right: 10px;
+}
+
+.suggestion-details {
+  flex-grow: 1;
+}
+
+.suggestion-make {
+  font-weight: bold;
+}
+
+.suggestion-model,
+.suggestion-version {
+  color: #555;
+}
+
+/* Nouveaux styles pour le texte dans les suggestions */
+.react-autosuggest__suggestion {
+  list-style-type: none; /* Supprime le point devant chaque suggestion */
+  color: black; /* Couleur du texte */
+}
+
+.selected-station {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #61dafb;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    color: #61dafb;
+    margin-bottom: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  p {
+    margin-bottom: 8px;
   }
+
+  strong {
+    font-weight: bold;
+  }
+
+  #map {
+    z-index: 1;
+  }
+  #row-container{
+    display: flex;
+    direction: column;
+    margin-right: 20px;
+  }
+
+
 }
