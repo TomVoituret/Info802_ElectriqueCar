@@ -1,19 +1,12 @@
+.body {
+  height: 100%;
+}
+
 .App {
-  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-}
-
-.App-header {
-  background-color: #282c34;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  padding: 20px;
+  height: 100%;
 }
 
 h3 {
@@ -86,35 +79,70 @@ h3 {
   color: black; /* Couleur du texte */
 }
 
-.selected-station {
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid #61dafb;
-  border-radius: 4px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+h2 {
+  color: #61dafb;
+  margin-bottom: 10px;
+}
 
-  h2 {
-    color: #61dafb;
-    margin-bottom: 10px;
-  }
+p {
+  margin-bottom: 8px;
+}
 
-  p {
-    margin-bottom: 8px;
-  }
+strong {
+  font-weight: bold;
+}
 
-  strong {
-    font-weight: bold;
-  }
+.containerTout {
+  display: flex;
+  flex-direction: row; /* Correction de la propriété */
+  height: 100%;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
 
-  #map {
-    z-index: 1;
-  }
-  #row-container{
-    display: flex;
-    direction: column;
-    margin-right: 20px;
-  }
+#getDestination {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid #4caf50; /* Couleur de la bordure */
+  border-radius: 5px; /* Coins arrondis */
+  color: #4caf50; /* Couleur du texte */
+  background-color: white; /* Couleur de fond */
+  transition: background-color 0.3s, color 0.3s;
+}
+#getDestination:hover {
+  background-color: #4caf50; /* Changement de couleur au survol */
+  color: white; /* Changement de couleur du texte au survol */
+}
 
+.totalTemps {
+  font-size: 20;
+}
+.totalTempsContainer {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
+}
 
+.totalTempsLabel {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.totalTemps {
+  display: inline-block;
+}
+
+.hours,
+.minutes {
+  font-weight: bold;
+}
+
+.separator {
+  margin-right: 5px;
+  margin-left: 5px;
 }

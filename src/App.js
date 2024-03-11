@@ -142,7 +142,6 @@ function App() {
 
   const onStartSuggestionSelected = (_, { suggestion }) => {
     // Utilisez les coordonnées du lieu sélectionné
-    console.log("Lieu sélectionné:", suggestion.label, suggestion.coordinates);
 
     setStartRes(suggestion);
   };
@@ -188,11 +187,6 @@ function App() {
 
   const onDestinationSuggestionSelected = (_, { suggestion }) => {
     // Utilize the coordinates of the selected destination
-    console.log(
-      "Destination selected:",
-      suggestion.label,
-      suggestion.coordinates
-    );
 
     setDestinationRes(suggestion);
   };
@@ -204,6 +198,7 @@ function App() {
   );
 
   const [routeGeometry, setRouteGeometry] = useState(null);
+  const [nameRoute, setNameRoute] = useState([]);
 
   const retrieveCloseStationsFromRadiusAndCenter = async (radius, center) => {
     try {
@@ -286,14 +281,10 @@ function App() {
     let tpm = 0;
     let dataTmp = dataStart;
     while (distanceTotalTraj > distanceMaxVehicle && tpm < 5) {
-      console.log(distanceTotalTraj + "supérieur à" + distanceMaxVehicle);
-      console.log("position courrent :" + currentPosition);
-
       let coordPointTest = getPointWithDistance(
         dataTmp.features[0].geometry.coordinates,
         distanceRecherche
       );
-      console.log(coordPointTest);
 
       const chargeStationTemp = await retrieveCloseStationsFromRadiusAndCenter(
         radius,
@@ -323,7 +314,6 @@ function App() {
           closestStation = stationCoords;
         }
       }
-      console.log("closestStation :" + closestStation);
       // Mettre à jour l'état avec les coordonnées de la station la plus proche
       chargingStations.push(closestStation);
       currentPosition = closestStation;
@@ -367,21 +357,22 @@ function App() {
       toast.error("Veuillez compléter tous les champs.");
       return;
     }
-    console.log(lastSelectedSuggestionVehicle);
     const startCoordinates = startRes?.coordinates;
     const destinationCoordinates = destinationRes?.coordinates;
 
     await getBornesDirection();
 
     const coordinatesArray = [startCoordinates];
+    const namesArray = [startRes?.label]; // Tableau pour stocker les noms correspondants
 
     for (let i = 0; i < chargingStations.length; i++) {
       const station = chargingStations[i];
       coordinatesArray.push(station);
+      namesArray.push(`Borne ${i + 1}`);
     }
     coordinatesArray.push(destinationCoordinates);
+    namesArray.push(destinationRes?.label);
 
-    console.log(coordinatesArray);
     const coordObject = {
       coordinates: coordinatesArray,
     };
@@ -389,6 +380,7 @@ function App() {
 
     try {
       setRouteGeometry(null);
+      setNameRoute([]);
 
       const response = await fetch(
         "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
@@ -409,6 +401,15 @@ function App() {
       if (data && data.features && data.features.length > 0) {
         const routeGeometryRes = data;
         setRouteGeometry(routeGeometryRes);
+        await setNameRoute(namesArray);
+        let nbBornes = namesArray.length - 2;
+        let totaltemps =
+          routeGeometryRes.features[0].properties.summary.duration / 60;
+        let tempsRecharge =
+          (lastSelectedSuggestionVehicle.connectors[0].time +
+            lastSelectedSuggestionVehicle.connectors[1].time) /
+          2;
+        handleSendTravelData(nbBornes, totaltemps, tempsRecharge);
       }
 
       // Le reste de votre code
@@ -417,10 +418,28 @@ function App() {
     }
   };
 
+  const [totalTimeTravelH, setTotalTimeTravelH] = useState(0);
+  const [totalTimeTravelM, setTotalTimeTravelM] = useState(0);
+  const handleSendTravelData = async (a, b, c) => {
+    const apiUrl = `http://localhost:3003/totalTime/${encodeURIComponent(
+      a
+    )}/${encodeURIComponent(b)}/${encodeURIComponent(c)}`;
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      const hours = Math.floor(data / 60);
+      const minutes = Math.round((data / 60 - hours) * 60);
+      setTotalTimeTravelH(hours);
+      setTotalTimeTravelM(minutes);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <div className="App">
       <ToastContainer />
-      <div id="row-container" style={{ display: "flex", flexDirection: "row" }}>
+      <div className="containerTout">
         <div style={{ paddingRight: "100px" }}>
           <h3>véhicule électrique :</h3>
           <Autosuggest
@@ -470,16 +489,35 @@ function App() {
             }}
           />
 
-          <button onClick={testDirection}>Obtenir l'itinéraire</button>
+          <button id="getDestination" onClick={testDirection}>
+            Obtenir l'itinéraire
+          </button>
+
+          {totalTimeTravelM > 0 && (
+            <div className="totalTempsContainer">
+              <p className="totalTempsLabel">Temps de trajet estimé :</p>
+              <p className="totalTemps">
+                {totalTimeTravelH > 0 && (
+                  <>
+                    <span className="hours">{totalTimeTravelH}h</span>
+                    {totalTimeTravelM > 0 && (
+                      <span className="separator"> et </span>
+                    )}
+                  </>
+                )}
+                <span className="minutes">{totalTimeTravelM}min</span>
+              </p>
+            </div>
+          )}
         </div>
-        <MyMap routeGeometry={routeGeometry} />
+        <MyMap
+          className="map"
+          routeGeometry={routeGeometry}
+          routeName={nameRoute}
+        />
       </div>
     </div>
   );
 }
 
 export default App;
-
-// https://odre.opendatasoft.com/api/explore/v2.1/catalog/datasets/bornes-irve/
-// records?select=geo_point_borne%2C%20ad_station%2C%20n_enseigne&where=xlongitude%20%3D%2051.42213496%20
-// and%20ylatitude%20%3D%205.32515049&limit=20
