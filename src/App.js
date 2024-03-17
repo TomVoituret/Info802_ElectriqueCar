@@ -103,7 +103,7 @@ function App() {
     </div>
   );
 
-  const apiKey = "5b3ce3597851110001cf6248605adc0eb50d4a4a81560f838d7d4ca3";
+  const apiKey = process.env.OPENROUTE_API_KEY; //"5b3ce3597851110001cf6248605adc0eb50d4a4a81560f838d7d4ca3";
 
   const [startSearchValue, setStartSearchValue] = useState("");
   const [startSuggestions, setStartSuggestions] = useState([]);
