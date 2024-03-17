@@ -419,7 +419,7 @@ function App() {
   const [totalTimeTravelH, setTotalTimeTravelH] = useState(0);
   const [totalTimeTravelM, setTotalTimeTravelM] = useState(0);
   const handleSendTravelData = async (a, b, c) => {
-    const apiUrl = `http://localhost:3003/totalTime/${encodeURIComponent(
+    const apiUrl = `https://apitrajetduration.azurewebsites.net/totalTime/${encodeURIComponent(
       a
     )}/${encodeURIComponent(b)}/${encodeURIComponent(c)}`;
     try {
@@ -489,12 +489,6 @@ function App() {
 
           <button id="getDestination" onClick={testDirection}>
             Obtenir l'itinéraire
-          </button>
-          <button
-            id="getDestination"
-            onClick={() => console.log("clé api : " + apiKey)}
-          >
-            test
           </button>
 
           {totalTimeTravelM > 0 && (
