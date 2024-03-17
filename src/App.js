@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Autosuggest from "react-autosuggest";
@@ -103,7 +103,7 @@ function App() {
     </div>
   );
 
-  const apiKey = "5b3ce3597851110001cf6248605adc0eb50d4a4a81560f838d7d4ca3"; // Remplacez par votre clé API OpenRouteService
+  const apiKey = "5b3ce3597851110001cf6248605adc0eb50d4a4a81560f838d7d4ca3";
 
   const [startSearchValue, setStartSearchValue] = useState("");
   const [startSuggestions, setStartSuggestions] = useState([]);
@@ -252,8 +252,6 @@ function App() {
   let chargingStations = [];
 
   const getBornesDirection = async () => {
-    const ApiKeyRoute =
-      "5b3ce3597851110001cf6248605adc0eb50d4a4a81560f838d7d4ca3";
     let currentPosition = startRes?.coordinates;
     const finalPosition = destinationRes?.coordinates;
     const distanceMaxVehicle =
@@ -263,7 +261,7 @@ function App() {
     let start = `${currentPosition[0]},${currentPosition[1]}`;
     const destination = `${destinationCoordinates[0]},${destinationCoordinates[1]}`;
     const options = '&options={"geometry_format":"geojson","geometry":"true"}';
-    const apiUrl = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ApiKeyRoute}&start=${start}&end=${destination}${options}`;
+    const apiUrl = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${start}&end=${destination}${options}`;
 
     const response = await fetch(apiUrl);
     const dataStart = await response.json();
@@ -320,7 +318,7 @@ function App() {
 
       let starttmp = `${closestStation[0]},${closestStation[1]}`;
 
-      const apiUrl2 = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ApiKeyRoute}&start=${starttmp}&end=${destination}${options}`;
+      const apiUrl2 = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${starttmp}&end=${destination}${options}`;
 
       const responsetmp = await fetch(apiUrl2);
       dataTmp = await responsetmp.json(); // Renommez la variable à l'intérieur de la boucle
@@ -491,6 +489,12 @@ function App() {
 
           <button id="getDestination" onClick={testDirection}>
             Obtenir l'itinéraire
+          </button>
+          <button
+            id="getDestination"
+            onClick={() => console.log("clé api : " + apiKey)}
+          >
+            test
           </button>
 
           {totalTimeTravelM > 0 && (
