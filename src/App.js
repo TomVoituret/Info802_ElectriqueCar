@@ -404,13 +404,9 @@ function App() {
         let totaltemps =
           routeGeometryRes.features[0].properties.summary.duration / 60;
         let tempsRecharge =
-          (lastSelectedSuggestionVehicle.connectors[0].time +
-            lastSelectedSuggestionVehicle.connectors[1].time) /
-          2;
+          lastSelectedSuggestionVehicle.connectors[1].time + 10;
         handleSendTravelData(nbBornes, totaltemps, tempsRecharge);
       }
-
-      // Le reste de votre code
     } catch (error) {
       console.error("Erreur lors de la récupération de l'itinéraire:", error);
     }
